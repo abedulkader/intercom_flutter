@@ -4,11 +4,11 @@ import 'dart:js' as js;
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:intercom_flutter_platform_interface/intercom_flutter_platform_interface.dart';
+import 'package:intercom_flutter_platform_interface/intercom_status_callback.dart';
 import 'package:uuid/uuid.dart';
 
 /// export the enum [IntercomVisibility]
-export 'package:intercom_flutter_platform_interface/intercom_flutter_platform_interface.dart'
-    show IntercomVisibility;
+export 'package:intercom_flutter_platform_interface/intercom_flutter_platform_interface.dart' show IntercomVisibility;
 
 /// A web implementation of the IntercomFlutter plugin.
 class IntercomFlutterWeb extends IntercomFlutterPlatform {
@@ -21,8 +21,7 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
     // It's fine to let the StreamController be garbage collected once all the
     // subscribers have cancelled; this analyzer warning is safe to ignore.
     // ignore: close_sinks
-    StreamController<dynamic> _unreadController =
-        StreamController<dynamic>.broadcast();
+    StreamController<dynamic> _unreadController = StreamController<dynamic>.broadcast();
     _unreadController.onListen = () {
       js.context.callMethod('Intercom', [
         'onUnreadCountChange',
@@ -62,8 +61,7 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
   Future<void> registerIdentifiedUser({String? userId, String? email}) async {
     if (userId?.isNotEmpty ?? false) {
       if (email?.isNotEmpty ?? false) {
-        throw ArgumentError(
-            'The parameter `email` must be null if `userId` is provided.');
+        throw ArgumentError('The parameter `email` must be null if `userId` is provided.');
       }
       // register the user with userId
       await js.context.callMethod('Intercom', [
@@ -83,8 +81,7 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
       ]);
       print("user created");
     } else {
-      throw ArgumentError(
-          'An identification method must be provided as a parameter, either `userId` or `email`.');
+      throw ArgumentError('An identification method must be provided as a parameter, either `userId` or `email`.');
     }
   }
 
@@ -112,6 +109,7 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
     int? signedUpAt,
     String? language,
     Map<String, dynamic>? customAttributes,
+    IntercomStatusCallback? statusCallback,
   }) async {
     Map<String, dynamic> userAttributes = {};
 
